@@ -3,6 +3,10 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+
+// Importing Routes
+const authRoute = require("./routes/auth");
 
 dotenv.config();
 
@@ -10,14 +14,15 @@ dotenv.config();
 mongoose.connect(
   process.env.DB_CONNECTION,
   {
-    useNewUrlParser: true,
     useUnifiedTopology: true,
+    useNewUrlParser: true,
   },
   () => console.log("DB Connected!")
 );
 
-// Importing Routes
-const authRoute = require("./routes/auth");
+// Middlewares
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // Route middlewares
 app.use("/", authRoute);
