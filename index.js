@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 
 // Importing Routes
 const authRoute = require("./routes/auth");
+const postRoute = require("./routes/posts");
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(bodyParser.json());
 
 // Route middlewares
 app.use("/", authRoute);
+app.use("/posts", postRoute);
 
 const PORT = 9000;
 

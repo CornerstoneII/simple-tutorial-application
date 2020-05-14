@@ -6,9 +6,14 @@ const User = require("../model/User");
 const Admin = require("../model/Admin");
 // Importing Validation File
 const { loginValidation, registerValidation } = require("../validation");
+/**
+ *
+ *
+ */
 // Importing bcrypt
 const bcrypt = require("bcryptjs");
-
+// Importing Json Web Token
+const jwt = require("jsonwebtoken");
 /**
  *
  *
@@ -104,7 +109,9 @@ router.post("/logintutor", async (req, res) => {
   const validPass = await bcrypt.compare(req.body.password, admin.password);
   if (!validPass) return res.status(400).send("Invalid Password");
 
-  res.send("Logged IN!");
+  // Create and assign a token to Admin / Tutor
+  const token = jwt.sign({ _id: admin._id }, process.env.TOKEN_SECRET);
+  res.header("auth-token", token).send(token);
 });
 
 // User / Student Login Route
@@ -121,6 +128,8 @@ router.post("/loginstudent", async (req, res) => {
   const validPass = await bcrypt.compare(req.body.password, user.password);
   if (!validPass) return res.status(400).send("Invalid Password");
 
-  res.send("Logged IN!");
+  // Create and assign a token to Admin / Tutor
+  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+  res.header("auth-token", token).send(token);
 });
 module.exports = router;
